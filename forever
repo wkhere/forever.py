@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #
 # (c) 2012 Wojciech Kaczmarek frk@wisdio.com
+# for the license please see:
+# http://github.com/herenowcoder/forever/blob/master/LICENSE
 
 usage = """
     ./forever options.. command command_args
