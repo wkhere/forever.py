@@ -48,7 +48,8 @@ def run_command(cmd):
     print "\n>>>> done <<<<"
 
 def eat_options(args):
-    global run_on_start, verbose, dry_run
+    global run_on_start, verbose, dry_run, masks
+    
     if args and args[0].startswith('-'):
         if args[0] == '-0':
             run_on_start = False
