@@ -82,6 +82,9 @@ if verbose or dry_run:
     print '* cmd:', cmd
 if dry_run: exit()
 
+if not files:
+    print "gimme some files"; exit(2)
+
 if run_on_start and len(cmd):
     run_command(cmd)
 
