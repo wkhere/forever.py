@@ -1,0 +1,24 @@
+
+Kqueue-based monitor for Mac OS X & BSD to trigger commands on source
+file change.
+
+So good to have kqueue api tested in the past on t800! :) 
+See http://wisd.io/rzioj
+
+
+Examples of usage for rubymotion projects:
+                        ./forever rake spec
+   bit crazy usage:     ./forever rake spec device
+   (installs on the device the app which runs only the specs!)
+   uber usage:          ./forever 'rake spec && rake device'
+
+
+Current behavior is that it ignores newly created files -> requires
+restart.  It also seems to remember another file change while command
+is running and then triggers another run - quite good!
+
+TODO:
+- it doesn't detect when files were recreated (eg. from git)
+
+This impl is excellent in python as kqueue api comes with the vanilla
+mac python - no gems, eggs etc.
