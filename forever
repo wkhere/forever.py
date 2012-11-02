@@ -26,8 +26,9 @@ defaults = [
      { 'masks':
        ['Rakefile'] +
        [dir + "/*.rb" for dir in
-        ['app', 'app/[0-9]*', 'app/[0-9]*/*', 'spec']],
-       'run_on_start': True
+        ['app', 'app/[0-9]*', 'app/[0-9]*/*', 'spec',
+         'resources/*.storyboard']],
+         'run_on_start': True
       }],
     [['sexit'],
      { 'masks': ['*.py', '*.pl'],
