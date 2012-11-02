@@ -105,4 +105,4 @@ while True:
     new_events = kq.control([], len(files))
     print "* detected change, %s" % \
       (("running %s" %cmd) if len(cmd) else "but no command given")
-    run_command(cmd)
+    if len(cmd): run_command(cmd)
