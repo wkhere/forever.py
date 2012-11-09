@@ -2,9 +2,6 @@
 Kqueue-based monitor for Mac OS X & BSD to trigger commands on source
 file change.
 
-So good to have kqueue api tested in the past on t800! :) 
-See http://wisd.io/rzioj
-
 
 Examples of usage for rubymotion projects:
                         ./forever rake spec
