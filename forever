@@ -12,6 +12,7 @@ usage = """
         -1             run command on start
         -0             don't run command on start
         -f 'masks'     masks of files to be monitored, QUOTED !!
+        -p preset      use configuration preset
         -v             print configuration before running
         -n             print configuration then exit
         -h             print this help and exit
@@ -38,7 +39,8 @@ defaults = [
 def cwd_proj():
     return os.getcwd().split('/')[-1]
 
-def default(proj=cwd_proj()):
+def default(proj=None):
+    proj = proj or cwd_proj()
     d = [d for [names,d] in defaults if proj in names]
     return d[0] if d else {}
 
@@ -50,7 +52,7 @@ def run_command(cmd):
     print "\n>>>> done <<<<"
 
 def eat_options(args):
-    global run_on_start, verbose, dry_run, masks
+    global run_on_start, verbose, dry_run, masks, preset
     
     if args and args[0].startswith('-'):
         if args[0] == '-0':
@@ -66,22 +68,33 @@ def eat_options(args):
         elif args[0] == '-f':
             masks = args[1].split(' ')
             return eat_options(args[2:])
+        elif args[0] == '-p':
+            preset = args[1]
+            return eat_options(args[2:])
         return eat_options(args[1:])
     else: return args
 
-
-masks = default().get('masks') or []
-run_on_start = default().get('run_on_start')
+masks = None
+run_on_start = None
 verbose = False
 dry_run = False
+preset = None
 args = eat_options(argv[1:])
+masks = masks or default(preset).get('masks') or []
+if run_on_start is None:
+    default_run_on_start = default(preset).get('run_on_start')
+    if default_run_on_start is not None: 
+        run_on_start = default_run_on_start
+    else:
+        run_on_start = True
 files = expand_masks(masks)
 cmd = ' '.join(args)
 
 if verbose or dry_run:
-    print '* default:', cwd_proj(), default()
+    print '* default:', preset or cwd_proj(), default(preset)
     print '* masks:', masks
     print '* files:', files
+    print '* run_on_start:', run_on_start
     print '* cmd:', cmd
 if dry_run: exit()
 
