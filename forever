@@ -30,6 +30,14 @@ defaults = [
         ['app', 'app/[0-9]*', 'app/[0-9]*/*', 'spec']],
        'run_on_start': True
       }],
+    [['rails'],
+     { 'masks': 
+       ['Rakefile'] +
+       [dir + "/*.*rb" for dir in
+        ['app/views/*', 'app/models', 'app/controllers', 'test/*']] +
+       [dir + "/*.yml" for dir in ['test/fixtures']],
+       'run_on_start': True
+       }],
     [['sexit'],
      { 'masks': ['*.py', '*.pl'],
        'run_on_start': True
