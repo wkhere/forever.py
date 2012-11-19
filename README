@@ -14,8 +14,5 @@ Current behavior is that it ignores newly created files -> requires
 restart.  It also seems to remember another file change while command
 is running and then triggers another run - quite good!
 
-TODO:
-- it doesn't detect when files were recreated (eg. from git)
-
-This impl is excellent in python as kqueue api comes with the vanilla
+This impl is excellent to do in python as kqueue api comes with the vanilla
 mac python - no gems, eggs etc.
