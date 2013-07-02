@@ -24,3 +24,8 @@ Installing:
 % chmod a+x forever
 
 Just put it in your project dir or wherever on the PATH if you prefer.
+
+
+License:
+
+This code is released under the BSD 2-Clause License.
