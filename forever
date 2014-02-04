@@ -18,10 +18,9 @@ usage = """
         -h             print this help and exit
 """
 
-import os, select
+import os
 from sys import argv
 from glob import glob
-from time import sleep
 
 defaults = [
     [['tnt', 'motion'],
@@ -113,34 +112,45 @@ if not files:
 if run_on_start and len(cmd):
     run_command(cmd)
 
-def add_file(f):
-  global filemap, events
-  fd = os.open(f, os.O_RDONLY)
-  filemap[fd] = f
-  ev = select.kevent(fd,
-    filter=select.KQ_FILTER_VNODE,
-    flags=select.KQ_EV_ADD | select.KQ_EV_ENABLE | select.KQ_EV_CLEAR,
-    fflags=select.KQ_NOTE_WRITE | select.KQ_NOTE_DELETE)
-  events.append(ev)
 
-kq = select.kqueue()
-events = []
-filemap = {}
-for f in files:
-  add_file(f)
+class FsNotifier: pass
 
-kq.control(events,0)
+class KQueueNotifier(FsNotifier):
+    def __init__(self, files):
+        import select
+        self.kq = select.kqueue()
+        self.events = []
+        self.filemap = {}
+        for f in files:
+            self.add_file(f)
+        self.kq.control(self.events, 0)
+
+    def add_file(self, f):
+        import select
+        fd = os.open(f, os.O_RDONLY)
+        self.filemap[fd] = f
+        ev = select.kevent(fd,
+            filter=select.KQ_FILTER_VNODE,
+            flags=select.KQ_EV_ADD | select.KQ_EV_ENABLE | select.KQ_EV_CLEAR,
+            fflags=select.KQ_NOTE_WRITE | select.KQ_NOTE_DELETE)
+        self.events.append(ev)
+
+    def wait(self):
+        new_events = kq.control([], len(files))
+        for ev in new_events:
+            import select
+            if ev.filter == select.KQ_FILTER_VNODE:
+                if ev.fflags & select.KQ_NOTE_DELETE:
+                    # todo: remove events of deleted files
+                    from time import sleep
+                    sleep(0.1)
+                    add_file(filemap[ev.ident])
+                    kq.control(events,0)
+
+notifier = KQueueNotifier(files)
 
 while True:
-    new_events = kq.control([], len(files))
-    for ev in new_events:
-      if ev.filter == select.KQ_FILTER_VNODE:
-        if ev.fflags & select.KQ_NOTE_DELETE:
-          # todo: remove events of deleted files
-          sleep(0.1)
-          add_file(filemap[ev.ident])
-          kq.control(events,0)
-
+    notifier.wait()
     print "* detected change, %s" % \
       (("running %s" %cmd) if len(cmd) else "but no command given")
     if len(cmd): run_command(cmd)
