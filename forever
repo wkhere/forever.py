@@ -28,7 +28,8 @@ defaults = [
             ['Rakefile', 'resources/*.storyboard']
             + [dir + "/*.rb" for dir in
                 ['app', 'app/[0-9]*', 'app/[0-9]*/*', 'spec']],
-       'run_on_start': True
+       'run_on_start': True,
+       'print_footer': True,
     }],
     [['rails'],
      { 'masks': 
@@ -57,10 +58,10 @@ def expand_masks(masks):
 
 def run_command(cmd):
     os.system(cmd)
-    print "\n>>>> done <<<<"
+    if print_footer: print "\n>>>> done <<<<"
 
 def eat_options(args):
-    global run_on_start, verbose, dry_run, masks, preset
+    global run_on_start, verbose, dry_run, masks, preset, print_footer
     
     if args and args[0].startswith('-'):
         if args[0] == '-0':
@@ -89,6 +90,7 @@ dry_run = False
 preset = None
 args = eat_options(argv[1:])
 masks = masks or default(preset).get('masks') or []
+print_footer = default(preset).get('print_footer') or False
 if run_on_start is None:
     default_run_on_start = default(preset).get('run_on_start')
     if default_run_on_start is not None: 
@@ -103,6 +105,7 @@ if verbose or dry_run:
     print '* masks:', masks
     print '* files:', files
     print '* run_on_start:', run_on_start
+    print '* print_footer:', print_footer
     print '* cmd:', cmd
 if dry_run: exit()
 
