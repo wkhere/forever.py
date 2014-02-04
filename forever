@@ -136,7 +136,7 @@ class KQueueNotifier(FsNotifier):
         self.events.append(ev)
 
     def wait(self):
-        new_events = kq.control([], len(files))
+        new_events = self.kq.control([], len(files))
         for ev in new_events:
             import select
             if ev.filter == select.KQ_FILTER_VNODE:
@@ -144,8 +144,8 @@ class KQueueNotifier(FsNotifier):
                     # todo: remove events of deleted files
                     from time import sleep
                     sleep(0.1)
-                    add_file(filemap[ev.ident])
-                    kq.control(events,0)
+                    self.add_file(self.filemap[ev.ident])
+                    self.kq.control(self.events, 0)
 
 notifier = KQueueNotifier(files)
 
