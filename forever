@@ -112,7 +112,7 @@ if dry_run: exit()
 if not files:
     print "gimme some files"; exit(2)
 
-if run_on_start and len(cmd):
+if run_on_start and cmd:
     run_command(cmd)
 
 
@@ -155,5 +155,5 @@ notifier = KQueueNotifier(files)
 while True:
     notifier.wait()
     print "* detected change, %s" % \
-      (("running %s" %cmd) if len(cmd) else "but no command given")
-    if len(cmd): run_command(cmd)
+      (("running %s" %cmd) if cmd else "but no command given")
+    if cmd: run_command(cmd)
