@@ -13,7 +13,7 @@ usage = """
         -0             don't run command on start
         -f 'masks'     masks of files to be monitored, QUOTED !!
         -p preset      use configuration preset
-        -v             print configuration before running
+        -v             print configuration before running, then be verbose
         -n             print configuration then exit
         -h             print this help and exit
 """
@@ -154,6 +154,6 @@ notifier = KQueueNotifier(files)
 
 while True:
     notifier.wait()
-    print "* detected change, %s" % \
+    if verbose: print "* detected change, %s" % \
       (("running %s" %cmd) if cmd else "but no command given")
     if cmd: run_command(cmd)
