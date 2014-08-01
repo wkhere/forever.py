@@ -1,3 +1,7 @@
+!! ---- important ---- !!
+This is obsolete, please use shell-based http://github.com/herenowcoder/forever instead.
+!! ------------------- !!
+
 
 Kqueue-based monitor for Mac OS X & BSD to trigger commands on source
 file change.
