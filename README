@@ -20,7 +20,7 @@ mac python - no gems, eggs etc.
 
 Installing:
 
-% curl https://raw.github.com/herenowcoder/forever/master/forever -o forever 
+% curl https://raw.github.com/herenowcoder/forever/master/forever.py -o forever
 % chmod a+x forever
 
 Just put it in your project dir or wherever on the PATH if you prefer.
